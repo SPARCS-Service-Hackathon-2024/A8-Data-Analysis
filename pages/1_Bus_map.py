@@ -13,7 +13,7 @@ bus_stops = df[['정류장명', '와이좌표', '엑스좌표']].rename(columns=
 bus_stops = bus_stops.dropna(subset=['latitude'])
 
 # Streamlit 앱 제목
-st.title('버스 정류장 위치 지도')
+st.title('버스 정류장 데이터 분석')
 
 # 지도에 표시
 st.pydeck_chart(pdk.Deck(
@@ -36,3 +36,14 @@ st.pydeck_chart(pdk.Deck(
 ))
 
 st.map(bus_stops)
+
+
+
+bus_stop_counts = df.groupby(['시도명', '시군구명', '읍면동명']).size().reset_index(name='버스 정류장 개수')
+bus_stop_counts_2 = df.groupby(['시도명', '시군구명']).size().reset_index(name='버스 정류장 개수')
+
+# 결과 표시
+st.write("## 버스 정류장 개수", bus_stop_counts)
+st.write(bus_stop_counts_2)
+st.bar_chart(bus_stop_counts_2.set_index('시군구명')['버스 정류장 개수'])
+
